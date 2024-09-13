@@ -38,7 +38,7 @@ runs:
       id: gen-diff
       shell: bash
       run: |
-        dstll -h > temp/diff.txt
+        dstll -h > diff.txt
         {
          echo 'diff<<EOF'
          cat diff.txt
