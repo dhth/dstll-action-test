@@ -43,6 +43,12 @@ runs:
       shell: bash
       run: rm -rf temp
 
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+
     - name: run dstll
       id: gen-diff
       shell: bash
@@ -52,7 +58,7 @@ runs:
         ENDING_COMMIT: ${{ inputs.ending-commit }}
         DIRECTORY: ${{ inputs.directory }}
       run: |
-        ./diff.sh "$DIRECTORY" diff.patch "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT"
+        dstll-diff "$DIRECTORY" diff.patch "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT"
         {
          echo 'diff<<EOF'
          cat diff.patch
