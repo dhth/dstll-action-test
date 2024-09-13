@@ -52,7 +52,7 @@ runs:
         STARTING_COMMIT: ${{ inputs.starting-commit }}
         ENDING_COMMIT: ${{ inputs.ending-commit }}
       run: |
-        diff.sh "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT" diff.patch
+        ./diff.sh "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT" diff.patch
         {
          echo 'diff<<EOF'
          cat diff.patch
