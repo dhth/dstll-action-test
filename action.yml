@@ -2,6 +2,9 @@ name: 'dstll-diff'
 description: 'Generate dstll diff'
 
 inputs:
+  directory:
+    description: 'Directory to operate in'
+    required: true
   pattern:
     description: 'File pattern to get diff for'
     required: true
@@ -53,9 +56,10 @@ runs:
         PATTERN: ${{ inputs.directory }}
         STARTING_COMMIT: ${{ inputs.starting-commit }}
         ENDING_COMMIT: ${{ inputs.ending-commit }}
+        DIRECTORY: ${{ inputs.directory }}
       run: |
         echo "diffing ${STARTING_COMMIT}..${ENDING_COMMIT} -- $PATTERN"
-        dstll-diff diff.patch "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT"
+        dstll-diff "$DIRECTORY" diff.patch "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT"
         {
          echo 'diff<<EOF'
          cat diff.patch
