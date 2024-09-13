@@ -1,0 +1,41 @@
+name: 'dstll-diff'
+description: 'Generate dstll diff'
+
+inputs:
+  pattern:
+    description: 'File pattern to get diff for'
+    required: true
+    default: '*'
+
+outputs:
+  diff:
+    description: "diff"
+    value: ${{ steps.random-number-generator.outputs.diff }}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+      shell: bash
+      with:
+        repository: 'dhth/dstll'
+        path: 'temp/dstll'
+
+    - name: Set up Go
+      shell: bash
+      uses: actions/setup-go@v5
+      with:
+        go-version: 1.23.1
+
+    - name: Cleanup
+      shell: bash
+      run: rm -rf temp
+
+    - name: go install
+      shell: bash
+      run: go install .
+      working-directory: ./temp/dstll
+
+    - name: run dstll
+      shell: bash
+      run: echo "diff=$(dstll -h)" >> $GITHUB_OUTPUT
