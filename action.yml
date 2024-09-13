@@ -25,14 +25,14 @@ runs:
       with:
         go-version: 1.23.1
 
-    - name: Cleanup
-      shell: bash
-      run: rm -rf temp
-
     - name: go install
       shell: bash
       run: go install .
       working-directory: ./temp/dstll
+
+    - name: Cleanup
+      shell: bash
+      run: rm -rf temp
 
     - name: run dstll
       id: gen-diff
