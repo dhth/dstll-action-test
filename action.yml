@@ -30,11 +30,21 @@ runs:
       run: go install .
       working-directory: ./temp/dstll
 
-    - name: Cleanup
+    - name: Cleanup dstll directory
       shell: bash
       run: rm -rf temp
 
     - name: run dstll
       id: gen-diff
       shell: bash
-      run: echo "diff=$(dstll -h)" >> $GITHUB_OUTPUT
+      run: |
+        dstll -h > temp/diff.txt
+        {
+         echo 'diff<<EOF'
+         cat diff.txt
+         echo EOF
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Delete diff file
+      shell: bash
+      run: rm diff.txt
