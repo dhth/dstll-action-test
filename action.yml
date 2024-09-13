@@ -10,7 +10,7 @@ inputs:
 outputs:
   diff:
     description: "diff"
-    value: ${{ steps.random-number-generator.outputs.diff }}
+    value: ${{ steps.gen-diff.outputs.diff }}
 
 runs:
   using: "composite"
@@ -37,5 +37,6 @@ runs:
       working-directory: ./temp/dstll
 
     - name: run dstll
+      id: gen-diff
       shell: bash
       run: echo "diff=$(dstll -h)" >> $GITHUB_OUTPUT
