@@ -46,13 +46,13 @@ runs:
     - name: run dstll
       id: gen-diff
       shell: bash
-      working-directory: ${{ inputs.directory }}
       env:
         PATTERN: ${{ inputs.directory }}
         STARTING_COMMIT: ${{ inputs.starting-commit }}
         ENDING_COMMIT: ${{ inputs.ending-commit }}
+        DIRECTORY: ${{ inputs.directory }}
       run: |
-        ./diff.sh "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT" diff.patch
+        ./diff.sh "$DIRECTORY" diff.patch "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT"
         {
          echo 'diff<<EOF'
          cat diff.patch
