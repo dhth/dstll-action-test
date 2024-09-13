@@ -24,24 +24,11 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
+    - name: Install dstll
+      uses: jaxxstorm/action-install-gh-release@v1.10.0
       with:
-        repository: 'dhth/dstll'
-        path: 'temp/dstll'
-
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: 1.23.1
-
-    - name: go install
-      shell: bash
-      run: go install .
-      working-directory: ./temp/dstll
-
-    - name: Cleanup dstll directory
-      shell: bash
-      run: rm -rf temp
+        repo: dhth/dstll
+        tag: v0.1.0
 
     - name: Set GitHub Path
       run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
