@@ -2,20 +2,18 @@
 
 set -e
 
-if [ $# -ne 5 ]; then
-    echo "Usage: $0 <workdir> <output_file> <pattern> <start> <end>"
+if [ $# -ne 4 ]; then
+    echo "Usage: $0 <output_file> <pattern> <start> <end>"
     echo "eg: $0 '**.go' startcommit endcommit diff.patch"
     exit 1
 fi
 
-wd="$1"
-output_file="$2"
-pattern="$3"
-start="$4"
-end="$5"
+output_file="$1"
+pattern="$2"
+start="$3"
+end="$4"
 
 cwd=$(pwd)
-cd "${wd}"
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 temp_dir=$(mktemp -d)
