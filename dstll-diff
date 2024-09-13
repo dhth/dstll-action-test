@@ -33,10 +33,10 @@ if [ -z "$changed" ]; then
 fi
 
 git checkout "$start"
-dstll write $(echo "$changed") -o "${temp_dir}/$start"
+dstll write $(git ls-files "$pattern") -o "${temp_dir}/$start"
 
 git checkout "$end"
-dstll write $(echo "$changed") -o "${temp_dir}/$end"
+dstll write $(git ls-files "$pattern") -o "${temp_dir}/$end"
 
 git checkout $current_branch
 
