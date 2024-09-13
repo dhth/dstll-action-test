@@ -2,10 +2,19 @@ name: 'dstll-diff'
 description: 'Generate dstll diff'
 
 inputs:
+  directory:
+    description: 'Directory to operate in'
+    required: true
   pattern:
     description: 'File pattern to get diff for'
     required: true
     default: '*'
+  starting-commit:
+    description: 'Starting commit for the diff'
+    required: true
+  ending-commit:
+    description: 'Ending commit for the diff'
+    required: true
 
 outputs:
   diff:
@@ -37,14 +46,19 @@ runs:
     - name: run dstll
       id: gen-diff
       shell: bash
+      working-directory: ${{ inputs.directory }}
+      env:
+        PATTERN: ${{ inputs.directory }}
+        STARTING_COMMIT: ${{ inputs.starting-commit }}
+        ENDING_COMMIT: ${{ inputs.ending-commit }}
       run: |
-        dstll -h > diff.txt
+        diff.sh "$PATTERN" "$STARTING_COMMIT" "$ENDING_COMMIT" diff.patch
         {
          echo 'diff<<EOF'
-         cat diff.txt
+         cat diff.patch
          echo EOF
         } >> "$GITHUB_OUTPUT"
 
     - name: Delete diff file
       shell: bash
-      run: rm diff.txt
+      run: rm diff.patch
