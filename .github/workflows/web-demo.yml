@@ -19,7 +19,7 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.get-dstlled-diff.outputs.diff }}
+      diff: ${{ steps.get-dstlled-diff.outputs.diff }}
     steps:
       - uses: actions/checkout@v4
         with:
