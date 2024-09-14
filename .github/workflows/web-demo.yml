@@ -18,6 +18,8 @@ env:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.get-dstlled-diff.outputs.diff }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -79,6 +81,6 @@ jobs:
     needs: generate
     steps:
       - name: Deploy to GitHub Pages
-        if: ${{ needs.generate.steps.get-dstlled-diff.outputs.diff != 'No changes detected' }}
+        if: ${{ needs.generate.outputs.diff != 'No changes detected' }}
         id: deployment
         uses: actions/deploy-pages@v4
