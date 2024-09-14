@@ -28,7 +28,7 @@ fi
 changed=$(git diff --name-only "$start..$end" -- "$pattern")
 
 if [ -z "$changed" ]; then
-    echo "No changes detected." >"${cwd}/${output_file}"
+    echo "No changes detected" >"${cwd}/${output_file}"
     exit 0
 fi
 
@@ -41,4 +41,11 @@ dstll write $(git ls-files "$pattern") -o "${temp_dir}/$end"
 git checkout $current_branch
 
 cd $temp_dir
-git --no-pager diff --no-index --relative "$start" "$end" >"${cwd}/${output_file}"  || true
+
+changed_dstlled=$(git diff --name-only --no-index --relative "$start" "$end")
+if [ -z "$changed_dstlled" ]; then
+    echo "No changes detected" >"${cwd}/${output_file}"
+    exit 0
+fi
+
+git --no-pager diff --no-index --relative --unified=1 "$start" "$end" >"${cwd}/${output_file}" || true
