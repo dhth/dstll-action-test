@@ -23,7 +23,7 @@ jobs:
         with:
           repository: 'docker/compose'
           path: 'repo'
-          fetch-depth: 10
+          fetch-depth: 11
 
       - name: Get starting commit
         id: get-starting-commit
