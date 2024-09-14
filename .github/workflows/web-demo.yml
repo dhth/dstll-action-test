@@ -23,27 +23,34 @@ jobs:
         with:
           repository: 'docker/compose'
           path: 'repo'
-          fetch-depth: 30
+          fetch-depth: 20
 
       - name: Get starting commit
         id: get-starting-commit
         working-directory: repo
         run: |
+          echo "commit-short=$(git rev-parse --short HEAD~10)" >> $GITHUB_OUTPUT
           echo "commit=$(git rev-parse HEAD~10)" >> $GITHUB_OUTPUT
 
       - name: Get ending commit
         id: get-ending-commit
         working-directory: repo
         run: |
+          echo "commit-short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - id: get-dstlled-diff
-        uses: dhth/dstll-action-test@v0.1.14
+        uses: dhth/dstll-action-test@v0.1.16
         with:
           directory: repo
           pattern: '**.go'
           starting-commit: ${{ steps.get-starting-commit.outputs.commit }}
           ending-commit: ${{ steps.get-ending-commit.outputs.commit }}
+
+      - run: echo "$DIFF"
+        id: debug
+        env:
+          DIFF: ${{ steps.get-dstlled-diff.outputs.diff }}
 
       - uses: actions/setup-node@v4
         if: ${{ steps.get-dstlled-diff.outputs.diff != 'No changes detected.' }}
@@ -63,7 +70,7 @@ jobs:
           DIFF: ${{ steps.get-dstlled-diff.outputs.diff }}
         run: |
           mkdir -p docs
-          echo "$DIFF" | diff2html --input stdin --title "dstlled-diff for docker/compose (${{ steps.get-starting-commit.outputs.commit }}..${{ steps.get-ending-commit.outputs.commit }} -- ${PATTERN})" --file docs/index.html
+          echo "$DIFF" | diff2html --input stdin --title "dstlled-diff for docker/compose (${{ steps.get-starting-commit.outputs.commit-short }}..${{ steps.get-ending-commit.outputs.commit-short }} -- ${PATTERN})" --file docs/index.html
 
       - name: Upload artifact
         if: ${{ steps.get-dstlled-diff.outputs.diff != 'No changes detected.' }}
