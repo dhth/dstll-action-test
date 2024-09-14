@@ -15,7 +15,7 @@ inputs:
   ending-commit:
     description: 'Ending commit for the diff'
     required: true
-  post-comment:
+  post-comment-on-pr:
     description: 'Whether to post a comment containing the diff on the corresponding PR'
     required: true
     default: 'false'
@@ -62,7 +62,7 @@ runs:
       run: rm diff.patch
 
     - uses: actions/github-script@v7
-      if: ${{ github.event_name != 'pull_request' && inputs.debug_mode == 'true' }}
+      if: ${{ github.event_name != 'pull_request' && inputs.post-comment-on-pr == 'true' }}
       with:
         github-token: ${{ github.token }}
         script: |
