@@ -15,6 +15,10 @@ inputs:
   ending-commit:
     description: 'Ending commit for the diff'
     required: true
+  post-comment:
+    description: 'Whether to post a comment containing the diff on the corresponding PR'
+    required: true
+    default: 'false'
 
 outputs:
   diff:
@@ -56,3 +60,46 @@ runs:
     - name: Delete diff file
       shell: bash
       run: rm diff.patch
+
+    - uses: actions/github-script@v7
+      if: ${{ github.event_name != 'pull_request' && inputs.debug_mode == 'true' }}
+      with:
+        github-token: ${{ github.token }}
+        script: |
+          // 1. Retrieve existing bot comments for the PR
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+          })
+          const botComment = comments.find(comment => {
+            return comment.user.type === 'Bot' && comment.body.includes('dstlled-diff')
+          })
+
+          // 2. Prepare format of the comment
+          const output = `### dstlled-diff
+          > ${{ inputs.starting-commit }}..${{ inputs.ending-commit }} -- ${{ inputs.pattern }}
+          <details><summary> expand </summary>
+
+          \`\`\`diff\n
+          ${{ steps.gen-diff.outputs.diff }}
+          \`\`\`
+
+          </details>`;
+
+          // 3. If we have a comment, update it, otherwise create a new one
+          if (botComment) {
+            github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: botComment.id,
+              body: output
+            })
+          } else {
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+          }
