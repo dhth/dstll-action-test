@@ -79,5 +79,6 @@ jobs:
     needs: generate
     steps:
       - name: Deploy to GitHub Pages
+        if: ${{ needs.generate.steps.get-dstlled-diff.outputs.diff != 'No changes detected' }}
         id: deployment
         uses: actions/deploy-pages@v4
