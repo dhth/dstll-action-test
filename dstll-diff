@@ -33,16 +33,16 @@ if [ -z "$changed" ]; then
 fi
 
 git checkout "$start"
-dstll write $(git ls-files "$pattern") -o "${temp_dir}/$start"
+dstll write $(git ls-files "$pattern") -o "${temp_dir}/$start" -q
 
 git checkout "$end"
-dstll write $(git ls-files "$pattern") -o "${temp_dir}/$end"
+dstll write $(git ls-files "$pattern") -o "${temp_dir}/$end" -q
 
 git checkout $current_branch
 
 cd $temp_dir
 
-changed_dstlled=$(git diff --name-only --no-index --relative "$start" "$end")
+changed_dstlled=$(git diff --name-only --no-index --relative "$start" "$end" || true)
 if [ -z "$changed_dstlled" ]; then
     echo "No changes detected" >"${cwd}/${output_file}"
     exit 0
