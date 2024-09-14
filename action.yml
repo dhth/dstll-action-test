@@ -19,6 +19,10 @@ inputs:
     description: 'Whether to post a comment containing the diff on the corresponding PR'
     required: true
     default: 'false'
+  save-diff-to-file:
+    description: 'Whether to save diff to a file'
+    required: false
+    default: 'false'
 
 outputs:
   diff:
@@ -58,6 +62,7 @@ runs:
         } >> "$GITHUB_OUTPUT"
 
     - name: Delete diff file
+      if: ${{ inputs.save-diff-to-file == 'false' }}
       shell: bash
       run: rm diff.patch
 
