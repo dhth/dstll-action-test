@@ -25,14 +25,14 @@ jobs:
         with:
           repository: 'docker/compose'
           path: 'repo'
-          fetch-depth: 11
+          fetch-depth: 501
 
       - name: Get starting commit
         id: get-starting-commit
         working-directory: repo
         run: |
-          echo "commit-short=$(git rev-parse --short HEAD~10)" >> $GITHUB_OUTPUT
-          echo "commit=$(git rev-parse HEAD~10)" >> $GITHUB_OUTPUT
+          echo "commit-short=$(git rev-parse --short HEAD~500)" >> $GITHUB_OUTPUT
+          echo "commit=$(git rev-parse HEAD~500)" >> $GITHUB_OUTPUT
 
       - name: Get ending commit
         id: get-ending-commit
