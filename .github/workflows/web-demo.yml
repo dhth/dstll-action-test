@@ -42,7 +42,7 @@ jobs:
           echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - id: get-dstlled-diff
-        uses: dhth/dstll-action-test@v0.1.17
+        uses: dhth/dstll-action-test@v0.1.18
         with:
           directory: repo
           pattern: '**.go'
