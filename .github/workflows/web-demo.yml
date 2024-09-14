@@ -42,12 +42,13 @@ jobs:
           echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - id: get-dstlled-diff
-        uses: dhth/dstll-action-test@v0.1.18
+        uses: dhth/dstll-action-test@v0.1.19
         with:
           directory: repo
           pattern: '**.go'
           starting-commit: ${{ steps.get-starting-commit.outputs.commit }}
           ending-commit: ${{ steps.get-ending-commit.outputs.commit }}
+          save-diff-to-file: 'true'
 
       - uses: actions/setup-node@v4
         if: ${{ steps.get-dstlled-diff.outputs.diff != 'No changes detected' }}
@@ -65,7 +66,7 @@ jobs:
           DIFF: ${{ steps.get-dstlled-diff.outputs.diff }}
         run: |
           mkdir -p docs
-          echo "$DIFF" | diff2html --input stdin --title "dstlled-diff for docker/compose (${{ steps.get-starting-commit.outputs.commit-short }}..${{ steps.get-ending-commit.outputs.commit-short }} -- ${PATTERN})" --file docs/index.html
+          diff2html --input file --title "dstlled-diff for docker/compose (${{ steps.get-starting-commit.outputs.commit-short }}..${{ steps.get-ending-commit.outputs.commit-short }} -- ${PATTERN})" --file docs/index.html -- diff.patch
 
       - name: Upload artifact
         if: ${{ steps.get-dstlled-diff.outputs.diff != 'No changes detected' }}
