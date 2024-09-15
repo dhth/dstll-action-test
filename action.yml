@@ -2,9 +2,6 @@ name: 'dstll-diff'
 description: 'Generate dstll diff'
 
 inputs:
-  directory:
-    description: 'Directory to operate in'
-    required: true
   pattern:
     description: 'File pattern to get diff for'
     required: true
@@ -15,9 +12,13 @@ inputs:
   ending-commit:
     description: 'Ending commit for the diff'
     required: true
+  directory:
+    description: 'Directory to operate in'
+    required: false
+    default: '.'
   post-comment-on-pr:
     description: 'Whether to post a comment containing the diff on the corresponding PR'
-    required: true
+    required: false
     default: 'false'
   save-diff-to-file:
     description: 'Whether to save diff to a file'
