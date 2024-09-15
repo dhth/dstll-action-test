@@ -90,7 +90,7 @@ runs:
             issue_number: context.issue.number,
           })
           const botComment = comments.find(comment => {
-            return comment.user.type === 'Bot' && comment.body.includes('dstlled-diff')
+            return comment.user.type === 'Bot' && comment.body.includes('### dstlled-diff')
           })
 
           // 2. Prepare format of the comment

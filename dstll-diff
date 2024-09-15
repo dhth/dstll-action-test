@@ -48,4 +48,4 @@ if [ -z "$changed_dstlled" ]; then
     exit 0
 fi
 
-git --no-pager diff --no-index --relative --unified=1 "$start" "$end" >"${cwd}/${output_file}" || true
+git --no-pager diff --no-index --relative --unified=0 "$start" "$end" >"${cwd}/${output_file}" || true
