@@ -32,22 +32,20 @@ jobs:
         working-directory: repo
         run: |
           echo "commit-short=$(git rev-parse --short HEAD~100)" >> $GITHUB_OUTPUT
-          echo "commit=$(git rev-parse HEAD~100)" >> $GITHUB_OUTPUT
 
       - name: Get ending commit
         id: get-ending-commit
         working-directory: repo
         run: |
           echo "commit-short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-          echo "commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - id: get-dstlled-diff
-        uses: dhth/dstll-action-test@v0.1.19
+        uses: dhth/dstll-action-test@v0.1.24
         with:
           directory: repo
           pattern: '**.go'
-          starting-commit: ${{ steps.get-starting-commit.outputs.commit }}
-          ending-commit: ${{ steps.get-ending-commit.outputs.commit }}
+          starting-commit: ${{ steps.get-starting-commit.outputs.commit-short }}
+          ending-commit: ${{ steps.get-ending-commit.outputs.commit-short }}
           save-diff-to-file: 'true'
 
       - uses: actions/setup-node@v4
