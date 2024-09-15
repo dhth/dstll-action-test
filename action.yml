@@ -47,9 +47,12 @@ runs:
     - name: Shorten commit hashes
       id: shorten-hashes
       shell: bash
+      env:
+        STARTING_COMMIT: ${{ inputs.starting-commit }}
+        ENDING_COMMIT: ${{ inputs.starting-commit }}
       run: |
-        START=${{ inputs.starting-commit:0:8 }}
-        END=${{ inputs.ending-commit:0:8 }}
+        START=$(echo "${STARTING_COMMIT:0:8}")
+        END=$(echo "${ENDING_COMMIT:0:8}")
         echo "start=$START" >> $GITHUB_OUTPUT
         echo "end=$END" >> $GITHUB_OUTPUT
 
