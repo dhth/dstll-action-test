@@ -44,13 +44,21 @@ runs:
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
 
+    - name: Shorten commit hashes
+      id: shorten-hashes
+      run: |
+        START=${{ inputs.starting-commit:0:8 }}
+        END=${{ inputs.ending-commit:0:8 }}
+        echo "start=$START" >> $GITHUB_OUTPUT
+        echo "end=$END" >> $GITHUB_OUTPUT
+
     - name: run dstll
       id: gen-diff
       shell: bash
       env:
         PATTERN: ${{ inputs.pattern }}
-        STARTING_COMMIT: ${{ inputs.starting-commit }}
-        ENDING_COMMIT: ${{ inputs.ending-commit }}
+        STARTING_COMMIT: ${{ steps.shorten-hashes.outputs.start }}
+        ENDING_COMMIT: ${{ steps.shorten-hashes.outputs.end }}
         DIRECTORY: ${{ inputs.directory }}
       run: |
         echo "diffing ${STARTING_COMMIT}..${ENDING_COMMIT} -- $PATTERN"
@@ -83,7 +91,7 @@ runs:
 
           // 2. Prepare format of the comment
           const output = `### dstlled-diff
-          > ${{ inputs.starting-commit }}..${{ inputs.ending-commit }} -- ${{ inputs.pattern }}
+          > ${{ steps.shorten-hashes.outputs.start }}..${{ steps.shorten-hashes.outputs.end }} -- ${{ inputs.pattern }}
           <details><summary> expand </summary>
 
           \`\`\`diff\n
