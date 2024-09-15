@@ -49,7 +49,7 @@ runs:
       shell: bash
       env:
         STARTING_COMMIT: ${{ inputs.starting-commit }}
-        ENDING_COMMIT: ${{ inputs.starting-commit }}
+        ENDING_COMMIT: ${{ inputs.ending-commit }}
       run: |
         START=$(echo "${STARTING_COMMIT:0:8}")
         END=$(echo "${ENDING_COMMIT:0:8}")
