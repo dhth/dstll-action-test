@@ -46,6 +46,7 @@ runs:
 
     - name: Shorten commit hashes
       id: shorten-hashes
+      shell: bash
       run: |
         START=${{ inputs.starting-commit:0:8 }}
         END=${{ inputs.ending-commit:0:8 }}
